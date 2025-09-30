@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__ . '/../modele/mesFonctionsAccesBDD.php';
 
 // Vérifier si l'utilisateur est connecté et est un client

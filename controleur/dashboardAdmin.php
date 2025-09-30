@@ -1,45 +1,49 @@
 <?php
-session_start();
+// Pas de session_start ici si déjà dans header.inc
 require_once __DIR__ . '/../modele/mesFonctionsAccesBDD.php';
 
-// Vérifier que l'utilisateur est admin ou bibliothécaire
-if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true || !in_array($_SESSION['role'], ['bibliothecaire','admin'])) {
-    header('Location: index.php?action=connexion');
+// Vérifier que l'utilisateur est connecté et est admin ou bibliothécaire
+if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true || !in_array($_SESSION['role'], ['bibliothecaire', 'admin'])) {
+    header('Location: index.php?action=login');
     exit;
 }
 
+// Connexion à la BDD
 $pdo = connect();
 
-//include 'chercher.php';
-// --- Ajouter un livre ---
+// --- AJOUTER UN LIVRE ---
 if (isset($_POST['ajouter'])) {
     $titre = htmlspecialchars($_POST['titre']);
     $auteur = htmlspecialchars($_POST['auteur']);
     $date_sortie = $_POST['date_sortie'];
     $resume = htmlspecialchars($_POST['resume']);
     $cotation = $_POST['cotation'] ?? '';
+    $image = null; // à gérer plus tard si tu veux ajouter l'image
 
-    ajouterLivre($pdo, $titre, $auteur, $date_sortie, $resume, $cotation);
+    ajouterLivre($pdo, $titre, $auteur, $date_sortie, $resume, $cotation, $image);
+
     header('Location: index.php?action=dashboardAdmin');
     exit;
 }
 
-// --- Supprimer un livre ---
+// --- SUPPRIMER UN LIVRE ---
 if (isset($_POST['supprimer'])) {
     $id = intval($_POST['supprimer']);
     supprimerLivre($pdo, $id);
+
     header('Location: index.php?action=dashboardAdmin');
     exit;
 }
 
-// Récupérer tous les livres
+// --- RÉCUPÉRER TOUS LES LIVRES ---
 $livres = getTousLesLivres($pdo);
+
+// Déconnexion de la BDD
+disconnect($pdo);
 
 // Définir le CSS spécifique
 $css = 'dashboardAdmin.css';
 
 // Inclure la vue
-include __DIR__ . '/../vue/vueDashboardAdmin.php';
-
-disconnect($pdo);
+require __DIR__ . '/../vue/vueDashboardAdmin.php';
 ?>

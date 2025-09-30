@@ -1,8 +1,7 @@
 <?php
-session_start();
 require_once __DIR__ . '/../modele/mesFonctionsAccesBDD.php';
 $pdo = connect();
-$_SESSION['id'] = $user['id'];
+
 $message = '';
 $css = 'login.css'; // 🔹 définir le CSS avant l'inclusion du header
 
@@ -27,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Connexion automatique après inscription
             $user = verifierUtilisateur($pdo, $login, $password);
             $_SESSION['connected'] = true;
+            $_SESSION['id'] = $user['id'];     // 🔹 déplacé ici
             $_SESSION['login'] = $user['login'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['nom'] = $user['nom'];
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = verifierUtilisateur($pdo, $login, $password);
         if ($user) {
             $_SESSION['connected'] = true;
+            $_SESSION['id'] = $user['id'];     // 🔹 déplacé ici
             $_SESSION['login'] = $user['login'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['nom'] = $user['nom'];
@@ -54,19 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user['role'] === 'bibliothecaire' || $user['role'] === 'admin') {
                 header('Location: index.php?action=dashboardAdmin');
                 exit;
-            }
-             else {
+            } else {
                 header('Location: ../index.php?action=dashboardClient');
                 exit;
             }
-            exit;
         } else {
             $message = "❌ Login ou mot de passe incorrect.";
         }
     }
 }
-
-disconnect($pdo);
 
 // Inclure la vue après avoir défini le CSS
 include __DIR__ . '/../vue/vueConnexion.php';

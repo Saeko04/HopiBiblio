@@ -67,7 +67,8 @@ header {
 
 .navigation {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
   margin-top: 10px;
 }
@@ -97,36 +98,6 @@ nav a {
 nav a:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-}
-
-.search-bar {
-  position: absolute;
-  top: 70%;
-  right: 20px;
-  transform: translateY(-50%);
-}
-
-.search-bar input {
-  padding: 10px;
-  width: 250px;
-  border: none;
-  border-radius: 20px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 14px;
-  box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.1),
-    inset -2px -2px 8px rgba(255, 255, 255, 0.7);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-
-.search-bar input:focus {
-  outline: none;
-  transform: scale(1.02);
-  box-shadow: 0 0 0 3px var(--accent);
-}
-
-.search-bar input::placeholder {
-  color: var(--muted);
 }
 
 footer {
