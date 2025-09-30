@@ -1,0 +1,105 @@
+/* Conteneur global */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  max-width: 900px;
+  margin: 40px auto;
+  background: var(--container-bg, #f9f9f9);
+  border-left: 4px solid var(--accent, #007bff);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Colonne image */
+.left-column img {
+  width: 100%;
+  max-width: 250px;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 5px;
+}
+
+/* Colonne texte */
+.right-column h1 {
+  margin-top: 0;
+  color: var(--btn-leather, #333);
+}
+
+.right-column p {
+  margin: 5px 0;
+  color: var(--text, #555);
+}
+
+/* Formulaire modification */
+.modifier-livre-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--form-bg, #fff);
+  border: 1px solid var(--border, #ccc);
+  border-radius: 8px;
+}
+
+/* Champs du formulaire */
+.modifier-livre-form input[type="text"],
+.modifier-livre-form input[type="date"],
+.modifier-livre-form textarea {
+  padding: 10px;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Textarea pour le résumé */
+.modifier-livre-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Bouton du formulaire */
+.modifier-livre-form button {
+  padding: 10px 20px;
+  background-color: var(--btn-primary, #007bff);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.modifier-livre-form button:hover {
+  background-color: var(--btn-primary-hover, #0056b3);
+}
+
+/* Conteneur des actions (bouton retour) */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+/* Style général des boutons */
+.actions .btn {
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Bouton Retour */
+.actions .btn {
+  background-color: #6c757d;
+}
+
+.actions .btn:hover {
+  background-color: #5a6268;
+}

@@ -1,0 +1,31 @@
+.privacy-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: black;
+  line-height: 1.6;
+}
+
+.privacy-wrapper h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.privacy-wrapper h2 {
+  margin-top: 25px;
+  color: black;
+}
+
+.privacy-wrapper ul {
+  margin: 10px 0 15px 20px;
+}
+
+.privacy-wrapper a {
+  color: black;
+  text-decoration: underline;
+}

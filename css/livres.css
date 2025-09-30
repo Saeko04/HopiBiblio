@@ -1,0 +1,14 @@
+.livre a {
+    text-decoration: none;
+    color: #333;
+}
+
+.livre a:hover {
+    background-color: #efefef;
+    transition: background-color 0.3s;
+}
+
+.livre strong {
+    display: block;
+    margin-bottom: 5px;
+}

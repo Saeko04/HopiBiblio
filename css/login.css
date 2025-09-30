@@ -1,0 +1,129 @@
+/* ===== Global ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f0e1, #e8dfc2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ===== Container principal ===== */
+.main-login-wrapper {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+/* ===== Formulaire ===== */
+.login-container {
+  background-color: #fefbf6;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  border: 1px solid #d6c9b2;
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Titre */
+.login-container h2 {
+  margin-bottom: 25px;
+  color: #493424;
+  font-size: 24px;
+}
+
+/* Inputs */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #c8b89a;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fffef9;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus {
+  border-color: #7f5234;
+  outline: none;
+}
+
+/* Boutons */
+.login-container button {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 10px;
+  background-color: #7f5234;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-container button:hover {
+  background-color: #99643d;
+}
+
+/* Messages */
+.message {
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #d9534f;
+  font-weight: bold;
+}
+
+/* Politique de confidentialité */
+.login-container label {
+  display: block;
+  margin: 12px 0;
+  font-size: 13px;
+}
+
+.login-container label a {
+  color: #7f5234;
+  text-decoration: underline;
+}
+
+/* Séparation */
+.login-container hr {
+  margin: 25px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .login-container {
+      padding: 30px 20px;
+  }
+
+  .login-container h2 {
+      font-size: 20px;
+  }
+
+  .login-container button {
+      font-size: 14px;
+      padding: 10px 16px;
+  }
+}
