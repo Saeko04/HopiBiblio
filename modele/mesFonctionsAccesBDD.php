@@ -34,11 +34,12 @@ function getTousLesLivres(PDO $pdo, string $tri = 'cotation'): array {
         $tri = 'cotation';
     }
 
-    $sql = "SELECT id, cotation, titre, auteur, resume 
+    $sql = "SELECT id, cotation, titre, auteur, date_sortie, resume 
             FROM livres 
             ORDER BY $tri ASC";
     return $pdo->query($sql)->fetchAll();
 }
+
 
 // Récupérer un livre précis
 function getLivreDetails(PDO $pdo, int $id): ?array {

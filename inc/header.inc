@@ -19,19 +19,23 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <header>
     <h1>La Plume Digitale</h1>
-    <div class="navigation">
-        <nav class="bouton-navigation">
-            <a href="index.php?action=accueil">Accueil</a>
-            <a href="index.php?action=chercher">Livres</a>
+    <nav class="navigation">
+    <a href="index.php?action=accueil">Accueil</a>
+    <a href="index.php?action=chercher">Livres</a>
 
-            <?php if (!empty($_SESSION['connected']) && $_SESSION['connected'] === true): ?>
-                <!-- Lien visible uniquement si l'utilisateur est connecté -->
-                <a href="index.php?action=logout">Déconnexion (<?= htmlspecialchars($_SESSION['login']) ?>)</a>
-            <?php else: ?>
-                <!-- Sinon on affiche le lien vers la page de connexion -->
-                <a href="index.php?action=connexion">Connexion</a>
-            <?php endif; ?>
-        </nav>
+    <?php if (!empty($_SESSION['connected']) && $_SESSION['connected'] === true): ?>
+        <?php if (in_array($_SESSION['role'], ['admin','bibliothecaire'])): ?>
+            <a href="index.php?action=dashboardAdmin">Dashboard Admin</a>
+        <?php else: ?>
+            <a href="index.php?action=dashboardClient">Dashboard Client</a>
+        <?php endif; ?>
+
+        <a href="index.php?action=logout">Déconnexion (<?= htmlspecialchars($_SESSION['login']) ?>)</a>
+    <?php else: ?>
+        <a href="index.php?action=connexion">Connexion</a>
+    <?php endif; ?>
+    </nav>
+
     </div>
 </header>
 
