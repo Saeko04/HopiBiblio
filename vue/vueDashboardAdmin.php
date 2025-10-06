@@ -1,7 +1,7 @@
 <div class="dashboard-admin-container">
     <h1>Tableau de bord - Bibliothécaire</h1>
     <p class="welcome">Bienvenue, <strong><?= htmlspecialchars($_SESSION['prenom'] . ' ' . $_SESSION['nom']) ?></strong> !</p>
-
+    <a href="#livres-non-rendus" class="btn">Aller aux livres non rendus</a>
     <h2>Rechercher un livre</h2>
     <form method="GET" action="index.php">
         <!-- Indique l'action pour le contrôleur -->
@@ -12,7 +12,7 @@
 
         <select name="cotation">
             <option value="">Toutes les cotations</option>
-            <?php foreach ($cotationsDisponibles as $cot): ?>
+            <?php foreach ($cotationsDisponibles as $cot) : ?>
                 <option value="<?= htmlspecialchars($cot['cotation']) ?>" <?= ($cotation ?? '') == $cot['cotation'] ? 'selected' : '' ?>>
                     <?= htmlspecialchars($cot['cotation']) ?>
                 </option>
@@ -41,7 +41,7 @@
 
     <!-- Section liste des livres -->
     <section class="card">
-        <h2>Liste des livres</h2>
+        <h2 id="liste-de-livres">Liste des livres</h2>
         <div class="table-container">
             <table class="table-livres">
                 <thead>
@@ -77,9 +77,9 @@
             </table>
         </div>
     </section>
-
+    <a href="#liste-de-livres" class="btn">Aller à la liste de livres</a>
     <!-- Section livres non rendus -->
-    <h2>Livres non rendus</h2>
+    <h2 id="livres-non-rendus">Livres non rendus</h2>
     <div class="table-responsive">
         <table>
             <thead>
@@ -111,7 +111,7 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
+                <?php else : ?>
                     <tr>
                         <td colspan="7" style="text-align:center;">Aucun livre non rendu</td>
                     </tr>
