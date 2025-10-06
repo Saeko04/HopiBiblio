@@ -9,16 +9,19 @@ if (session_status() === PHP_SESSION_NONE) {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
     <meta charset="UTF-8">
     <title>La Plume Digitale</title>
     <link rel="stylesheet" href="css/style.css">
     <?php if (!empty($css)): ?>
         <link rel="stylesheet" href="css/<?= htmlspecialchars($css) ?>">
     <?php endif; ?>
+
 </head>
 <body>
 <header>
-    <h1>La Plume Digitale</h1>
+
+    <h1>La Plume Digitale - LEMAY & SEYS</h1>
     <nav class="navigation">
     <a href="index.php?action=accueil">Accueil</a>
     <a href="index.php?action=chercher">Livres</a>
