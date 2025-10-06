@@ -237,4 +237,3 @@ function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
     $stmt->execute([$idUtilisateur]);
     return $stmt->fetchAll();
 }
-}
