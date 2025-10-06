@@ -9,8 +9,9 @@ if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true || $_SESSI
 
 $pdo = connect();
 
+// Récupérer les livres empruntés par le client avec l'image
 $stmt = $pdo->prepare("
-    SELECT l.titre, l.auteur, l.date_sortie 
+    SELECT l.id, l.titre, l.auteur, l.date_sortie, l.image
     FROM livres l
     JOIN emprunts e ON l.id = e.id_livre
     WHERE e.id_utilisateur = ?
@@ -19,10 +20,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$_SESSION['id']]);
 $livresEmpruntes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 disconnect($pdo);
 
 $css = 'dashboardClient.css';
-//include_once __DIR__ . '/../inc/header.inc'; // header minimal
 include  __DIR__ . '/../vue/vueDashboardClient.php';
-?>

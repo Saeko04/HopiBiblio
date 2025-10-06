@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['prenom'] = $user['prenom'];
 
             // Redirection vers dashboard client
-            header('Location: ../index.php?action=dashboardClient');
+            header('Location: index.php?action=dashboardClient');
             exit;
         } else {
             $message = "❌ Ce login existe déjà.";
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: index.php?action=dashboardAdmin');
                 exit;
             } else {
-                header('Location: ../index.php?action=dashboardClient');
+                header('Location: index.php?action=dashboardClient');
                 exit;
             }
         } else {

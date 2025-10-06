@@ -1,7 +1,8 @@
 <?php
 
 // --- Connexion à la BDD ---
-function connect(): PDO {
+function connect(): PDO
+{
     $host = 'localhost';
     $db = 'dblogin4222';
     $user = 'login4222';
@@ -21,35 +22,39 @@ function connect(): PDO {
     }
 }
 
-function disconnect(&$pdo) {
+function disconnect(&$pdo)
+{
     $pdo = null;
 }
 
 // --- CRUD LIVRES ---
 
 // Récupérer tous les livres avec tri (titre, auteur, cotation)
-function getTousLesLivres(PDO $pdo, string $tri = 'cotation'): array {
-    $colonnesAutorisees = ['cotation', 'titre', 'auteur'];
+function getTousLesLivres(PDO $pdo, string $tri = 'id'): array
+{
+    $colonnesAutorisees = ['id', 'cotation', 'titre', 'auteur'];
     if (!in_array($tri, $colonnesAutorisees)) {
-        $tri = 'cotation';
+        $tri = 'id';
     }
 
-    $sql = "SELECT id, cotation, titre, auteur, date_sortie, resume 
-            FROM livres 
-            ORDER BY $tri ASC";
+    $sql = "SELECT id, cotation, titre, auteur, resume, date_sortie, image FROM livres ORDER BY id ASC";
+
     return $pdo->query($sql)->fetchAll();
 }
 
 
+
 // Récupérer un livre précis
-function getLivreDetails(PDO $pdo, int $id): ?array {
+function getLivreDetails(PDO $pdo, int $id): ?array
+{
     $stmt = $pdo->prepare("SELECT * FROM livres WHERE id = ?");
     $stmt->execute([$id]);
     return $stmt->fetch() ?: null;
 }
 
 // Ajouter un livre
-function ajouterLivre(PDO $pdo, string $titre, string $auteur, string $date_sortie, string $resume, string $cotation, $image = null): void {
+function ajouterLivre(PDO $pdo, string $titre, string $auteur, string $date_sortie, string $resume, string $cotation, $image = null): void
+{
     $sql = "INSERT INTO livres (titre, auteur, date_sortie, resume, cotation, image) 
             VALUES (:titre, :auteur, :date_sortie, :resume, :cotation, :image)";
     $stmt = $pdo->prepare($sql);
@@ -64,13 +69,15 @@ function ajouterLivre(PDO $pdo, string $titre, string $auteur, string $date_sort
 }
 
 // Supprimer un livre
-function supprimerLivre(PDO $pdo, int $id): void {
+function supprimerLivre(PDO $pdo, int $id): void
+{
     $stmt = $pdo->prepare("DELETE FROM livres WHERE id = ?");
     $stmt->execute([$id]);
 }
 
 // Modifier un livre
-function mettreAJourLivre(PDO $pdo, int $id, string $titre, string $auteur, string $date_sortie, string $resume, string $cotation, $image = null): void {
+function mettreAJourLivre(PDO $pdo, int $id, string $titre, string $auteur, string $date_sortie, string $resume, string $cotation, $image = null): void
+{
     $sql = "UPDATE livres 
             SET titre = :titre, auteur = :auteur, date_sortie = :date_sortie, resume = :resume, cotation = :cotation, image = :image 
             WHERE id = :id";
@@ -87,8 +94,8 @@ function mettreAJourLivre(PDO $pdo, int $id, string $titre, string $auteur, stri
 }
 
 // --- RECHERCHE / FILTRES ---
-
-function chercherLivres(PDO $pdo, string $titre = '', string $auteur = '', string $cotation = '', string $annee = ''): array {
+function chercherLivres(PDO $pdo, string $titre = '', string $auteur = '', string $cotation = '', string $annee = '', string $id = '', string $genre = ''): array
+{
     $sql = "SELECT livres.*, genres.nom AS nom_genre
             FROM livres
             LEFT JOIN genres ON livres.cotation = genres.id_cotation
@@ -115,38 +122,58 @@ function chercherLivres(PDO $pdo, string $titre = '', string $auteur = '', strin
         $params[':annee'] = $annee;
     }
 
+    if ($id !== '') {
+        $sql .= " AND livres.id = :id";
+        $params[':id'] = $id;
+    }
+
+    if ($genre !== '') {
+        $sql .= " AND livres.cotation = :genre";
+        $params[':genre'] = $genre;
+    }
+
+    $sql .= " ORDER BY livres.id ASC";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    return $stmt->fetchAll();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
-function getAnneesDisponibles(PDO $pdo): array {
+
+
+function getAnneesDisponibles(PDO $pdo): array
+{
     $stmt = $pdo->query("SELECT DISTINCT YEAR(date_sortie) AS annee FROM livres ORDER BY annee DESC");
     return $stmt->fetchAll();
 }
 
-function cotationsDisponibles(PDO $pdo): array {
+function cotationsDisponibles(PDO $pdo): array
+{
     $stmt = $pdo->query("SELECT DISTINCT cotation FROM livres ORDER BY cotation ASC");
     return $stmt->fetchAll();
 }
 
 // Vérifie si un login existe
-function loginExiste(PDO $pdo, string $login): bool {
+function loginExiste(PDO $pdo, string $login): bool
+{
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM utilisateurs WHERE login = ?");
     $stmt->execute([$login]);
     return $stmt->fetchColumn() > 0;
 }
 
 // Crée un nouvel utilisateur
-function creerUtilisateur(PDO $pdo, string $nom, string $prenom, string $login, string $password, string $role = 'client'): bool {
+function creerUtilisateur(PDO $pdo, string $nom, string $prenom, string $login, string $password, string $role = 'client'): bool
+{
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT INTO utilisateurs (nom, prenom, login, password, role) VALUES (?, ?, ?, ?, ?)");
     return $stmt->execute([$nom, $prenom, $login, $hash, $role]);
 }
 
 // Vérifie le login et retourne l'utilisateur
-function verifierUtilisateur(PDO $pdo, string $login, string $password): ?array {
+function verifierUtilisateur(PDO $pdo, string $login, string $password): ?array
+{
     $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = ?");
     $stmt->execute([$login]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -157,6 +184,37 @@ function verifierUtilisateur(PDO $pdo, string $login, string $password): ?array 
     return null;
 }
 
+function getLivresNonRendus($pdo, $dureeEmprunt = 14)
+{
+    $sql = "SELECT e.id, l.titre, l.auteur, e.date_emprunt, 
+                   u.nom, u.prenom,
+                   DATE_ADD(e.date_emprunt, INTERVAL :duree DAY) AS date_limite,
+                   DATEDIFF(CURDATE(), DATE_ADD(e.date_emprunt, INTERVAL :duree DAY)) AS jours_depasse
+            FROM emprunts e
+            JOIN livres l ON e.id_livre = l.id
+            JOIN utilisateurs u ON e.id_utilisateur = u.id
+            WHERE e.date_retour IS NULL";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':duree' => $dureeEmprunt]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 
-?>
+
+function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
+{
+    $sql = "SELECT l.titre, 
+                   l.auteur, 
+                   e.date_emprunt, 
+                   e.date_limite, 
+                   e.date_retour,
+                   DATEDIFF(CURDATE(), e.date_limite) AS jours_retard
+            FROM emprunts e
+            JOIN livres l ON e.id_livre = l.id
+            WHERE e.id_utilisateur = ?
+            ORDER BY e.date_emprunt DESC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$idUtilisateur]);
+    return $stmt->fetchAll();
+}
