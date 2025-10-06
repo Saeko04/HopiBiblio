@@ -237,3 +237,27 @@ function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
     $stmt->execute([$idUtilisateur]);
     return $stmt->fetchAll();
 }
+
+// --- STATISTIQUES ---
+
+//Nombre total de livres
+function getNombreTotalLivres(PDO $pdo): int {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM livres");
+    return (int) $stmt->fetchColumn();
+}
+
+//Nombre total d'emprunts en cours
+function getNombreEmpruntsEnCours(PDO $pdo): int {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM emprunts WHERE date_retour IS NULL");
+    return (int) $stmt->fetchColumn();
+}
+
+//Nombre d'emprunts par livre
+function getFrequenceEmpruntParLivre(PDO $pdo): array {
+    $sql = "SELECT l.titre, COUNT(e.id) AS nb_emprunts
+            FROM livres l
+            LEFT JOIN emprunts e ON l.id = e.id_livre
+            GROUP BY l.id
+            ORDER BY nb_emprunts DESC";
+    return $pdo->query($sql)->fetchAll();
+}
