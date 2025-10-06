@@ -1,14 +1,24 @@
-<div class="dashboard-container">
-    <h2>Bienvenue <?= htmlspecialchars($_SESSION['prenom']) ?> <?= htmlspecialchars($_SESSION['nom']) ?></h2>
+<div class="container">
+    <h1>Mes livres empruntés</h1>
 
-    <?php if ($livresEmpruntes): ?>
-        <h3>Vos livres empruntés :</h3>
-        <ul>
-            <?php foreach ($livresEmpruntes as $livre): ?>
-                <li><?= htmlspecialchars($livre['titre']) ?> - <?= htmlspecialchars($livre['auteur']) ?> (<?= htmlspecialchars($livre['date_sortie']) ?>)</li>
+    <?php if (empty($livresEmpruntes)) : ?>
+        <p>Vous n'avez emprunté aucun livre pour le moment.</p>
+    <?php else : ?>
+        <div class="book-cards">
+            <?php foreach ($livresEmpruntes as $livre) : ?>
+                <a href="index.php?action=detail-livre&id=<?= $livre['id'] ?>&from=mes-emprunts" class="book-card">
+                    <?php if (!empty($livre['image'])): ?>
+                        <img src="data:image/jpeg;base64,<?= base64_encode($livre['image']) ?>" alt="<?= htmlspecialchars($livre['titre']) ?>">
+                    <?php else: ?>
+                        <img src="images/placeholder.png" alt="Pas d'image">
+                    <?php endif; ?>
+                    <div class="book-info">
+                        <h3><?= htmlspecialchars($livre['titre']) ?></h3>
+                        <p>Auteur : <?= htmlspecialchars($livre['auteur']) ?></p>
+                        <p>Sortie : <?= htmlspecialchars($livre['date_sortie']) ?></p>
+                    </div>
+                </a>
             <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Vous n'avez encore emprunté aucun livre.</p>
+        </div>
     <?php endif; ?>
 </div>

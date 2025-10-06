@@ -2,8 +2,13 @@
     <!-- Colonne gauche : image -->
     <?php if (!empty($livre['image'])) : ?>
         <div class="left-column">
-            <img src="data:image/jpeg;base64,<?= base64_encode($livre['image']) ?>" alt="Couverture du livre">
+            <?php if (!empty($livre['image'])): ?>
+                <img src="data:image/jpeg;base64,<?= base64_encode($livre['image']) ?>" alt="Couverture du livre">
+            <?php else: ?>
+                <img src="img/placeholder.png" alt="Pas d'image disponible">
+            <?php endif; ?>
         </div>
+
     <?php endif; ?>
 
     <!-- Colonne droite : texte -->
@@ -14,11 +19,19 @@
         <p><strong>Description :</strong></p>
         <p><?= nl2br(htmlspecialchars($livre['resume'])) ?></p>
 
-        <div class="actions">
-            <?php if (!empty($_SESSION['connected']) && in_array($_SESSION['role'], ['bibliothecaire', 'admin'])) : ?>
-                <a href="index.php?action=modifier-livre&id=<?= $livre['id'] ?>" class="btn">Modifier ce livre</a>
-            <?php endif; ?>
-            <a href="index.php?action=chercher" class="btn">Retour à la liste</a>
-        </div>
+        <?php
+        $from = $_GET['from'] ?? 'chercher'; // valeur par défaut
+
+        if ($from === 'mes-emprunts') {
+            $retourTexte = 'Retour à mes emprunts';
+            $retourUrl = 'index.php?action=dashboardClient';
+        } else {
+            $retourTexte = 'Retour à la liste';
+            $retourUrl = 'index.php?action=chercher';
+        }
+        ?>
+        <a href="<?= $retourUrl ?>" class="btn"><?= $retourTexte ?></a>
+
+
     </div>
 </div>

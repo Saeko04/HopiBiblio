@@ -69,7 +69,7 @@
                     <div class="book-list">
                         <?php foreach ($livres as $livre) : ?>
                             <article class="book-card">
-                                <a href="index.php?action=detail-livre&id=<?= $livre['id'] ?>" class="book-link">
+                                <a href="index.php?action=detail-livre&id=<?= $livre['id'] ?>&from=chercher" class="book-link">
                                     <h3><?= htmlspecialchars($livre['titre']) ?></h3>
                                     <div class="book-meta">
                                         <span class="genre"><?= htmlspecialchars($livre['nom_genre'] ?? 'Genre inconnu') ?></span>

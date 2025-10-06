@@ -1,3 +1,4 @@
+/* Conteneur général */
 .container {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -11,6 +12,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* Colonne gauche : image */
 .left-column img {
     width: 100%;
     max-width: 250px;
@@ -18,6 +20,7 @@
     border-radius: 5px;
 }
 
+/* Colonne droite : texte */
 .right-column h1 {
     margin-top: 0;
     color: var(--btn-leather);
@@ -28,15 +31,10 @@
     color: var(--text);
 }
 
-/* Conteneur des actions */
-.actions {
+/* Bouton Retour */
+.btn {
+    display: inline-block;
     margin-top: 20px;
-    display: flex;
-    gap: 15px; /* espace entre les boutons */
-}
-
-/* Style général des boutons */
-.actions .btn {
     padding: 10px 20px;
     text-decoration: none;
     font-weight: bold;
@@ -44,22 +42,9 @@
     transition: all 0.2s ease-in-out;
     cursor: pointer;
     color: #fff;
+    background-color: #463125;
 }
 
-/* Bouton Modifier (différent style pour admin/bibliothécaire) */
-.actions .btn:first-child {
-    background-color: #007bff; /* bleu */
-}
-
-.actions .btn:first-child:hover {
-    background-color: #0056b3;
-}
-
-/* Bouton Retour */
-.actions .btn:last-child {
-    background-color: #6c757d; /* gris */
-}
-
-.actions .btn:last-child:hover {
-    background-color: #5a6268;
+.btn:hover {
+    background-color: #a06d47;
 }

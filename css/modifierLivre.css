@@ -64,7 +64,7 @@
 /* Bouton du formulaire */
 .modifier-livre-form button {
   padding: 10px 20px;
-  background-color: var(--btn-primary, #007bff);
+  background-color: var(--btn-primary, #463125);
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -74,7 +74,7 @@
 }
 
 .modifier-livre-form button:hover {
-  background-color: var(--btn-primary-hover, #0056b3);
+  background-color: var(--btn-primary-hover, #a06d47);
 }
 
 /* Conteneur des actions (bouton retour) */
@@ -97,9 +97,9 @@
 
 /* Bouton Retour */
 .actions .btn {
-  background-color: #6c757d;
+  background-color: #463125;
 }
 
 .actions .btn:hover {
-  background-color: #5a6268;
+  background-color: #a06d47;
 }
