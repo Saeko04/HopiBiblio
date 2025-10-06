@@ -31,86 +31,87 @@ if (!$user) {
 }
 
 // Si formulaire de modification soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['field'], $_POST['value'])) {
-    $field = $_POST['field'];
-    $value = trim($_POST['value']);
+// Si formulaire de modification soumis (formulaire global)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nom'], $_POST['prenom'], $_POST['login'])) {
+    $newNom = trim($_POST['nom']);
+    $newPrenom = trim($_POST['prenom']);
+    $newLogin = trim($_POST['login']);
+
+    $errors = [];
+    $successes = [];
 
     // validation basique
-    if ($value === '') {
-        echo '<p style="color:red;">La valeur ne peut pas être vide.</p>';
-    } else {
-        // si on modifie le login, vérifier qu'il n'existe pas déjà pour un autre utilisateur
-        if ($field === 'login') {
-            // vérifier existence
-            if (loginExiste($pdo, $value)) {
-                // si le login appartient au même utilisateur, autoriser
-                $existing = $pdo->prepare('SELECT id FROM utilisateurs WHERE login = ?');
-                $existing->execute([$value]);
-                $row = $existing->fetch();
-                if ($row && (int)$row['id'] !== $userId) {
-                    echo '<p style="color:red;">Ce login est déjà utilisé.</p>';
-                } else {
-                    if (updateUserField($pdo, $userId, $field, $value)) {
-                        echo '<p style="color:green;">Mis à jour avec succès.</p>';
-                        // refresh user
-                        $user = getUserById($pdo, $userId);
-                    } else {
-                        echo '<p style="color:red;">Erreur lors de la mise à jour.</p>';
-                    }
-                }
-            } else {
-                if (updateUserField($pdo, $userId, $field, $value)) {
-                    echo '<p style="color:green;">Mis à jour avec succès.</p>';
-                    $user = getUserById($pdo, $userId);
-                } else {
-                    echo '<p style="color:red;">Erreur lors de la mise à jour.</p>';
-                }
-            }
-        } else {
-            // nom ou prenom
-            if (updateUserField($pdo, $userId, $field, $value)) {
-                echo '<p style="color:green;">Mis à jour avec succès.</p>';
-                $user = getUserById($pdo, $userId);
-            } else {
-                echo '<p style="color:red;">Erreur lors de la mise à jour.</p>';
+    if ($newNom === '') {
+        $errors[] = 'Le nom ne peut pas être vide.';
+    }
+    if ($newPrenom === '') {
+        $errors[] = 'Le prénom ne peut pas être vide.';
+    }
+    if ($newLogin === '') {
+        $errors[] = 'Le login ne peut pas être vide.';
+    }
+
+    // Vérifier le login si pas d'erreur de champ
+    if (empty($errors)) {
+        if ($newLogin !== $user['login']) {
+            // login modifié -> vérifier s'il est déjà pris par un autre utilisateur
+            $stmt = $pdo->prepare('SELECT id FROM utilisateurs WHERE login = ?');
+            $stmt->execute([$newLogin]);
+            $row = $stmt->fetch();
+            if ($row && (int)$row['id'] !== $userId) {
+                $errors[] = 'Ce login est déjà utilisé par un autre utilisateur.';
             }
         }
     }
+
+    // Si pas d'erreurs, effectuer les mises à jour nécessaires
+    if (empty($errors)) {
+        // Mettre à jour chaque champ qui a changé
+        $fieldsToUpdate = [];
+        if ($newNom !== $user['nom']) {
+            if (updateUserField($pdo, $userId, 'nom', $newNom)) {
+                $successes[] = 'Nom mis à jour.';
+            } else {
+                $errors[] = 'Erreur lors de la mise à jour du nom.';
+            }
+        }
+        if ($newPrenom !== $user['prenom']) {
+            if (updateUserField($pdo, $userId, 'prenom', $newPrenom)) {
+                $successes[] = 'Prénom mis à jour.';
+            } else {
+                $errors[] = 'Erreur lors de la mise à jour du prénom.';
+            }
+        }
+        if ($newLogin !== $user['login']) {
+            if (updateUserField($pdo, $userId, 'login', $newLogin)) {
+                $successes[] = 'Login mis à jour.';
+            } else {
+                $errors[] = 'Erreur lors de la mise à jour du login.';
+            }
+        }
+
+        // rafraîchir les données utilisateur après mise à jour
+        if (!empty($successes)) {
+            $user = getUserById($pdo, $userId);
+        }
+    }
+
+    // Afficher messages
+    foreach ($errors as $err) {
+        echo '<p style="color:red;">' . htmlspecialchars($err) . '</p>';
+    }
+    foreach ($successes as $s) {
+        echo '<p style="color:green;">' . htmlspecialchars($s) . '</p>';
+    }
 }
 
-// affichage des données de l'utilisateur avec boutons de modification
-echo '<form method="post" style="display:inline">';
-echo '<p><strong>Nom :</strong> ' . htmlspecialchars($user['nom']) . ' <button type="button" onclick="document.getElementById(\'edit-nom\').style.display=\'inline-block\'">Modifier</button></p>';
-echo '</form>';
-
-echo '<div id="edit-nom" style="display:none;margin-bottom:8px">';
+// affichage des données de l'utilisateur dans un formulaire global
 echo '<form method="post">';
-echo '<input type="hidden" name="field" value="nom">';
-echo '<input type="text" name="value" value="' . htmlspecialchars($user['nom']) . '">';
-echo '<button type="submit">Enregistrer</button> ';
-echo '<button type="button" onclick="this.parentNode.parentNode.style.display=\'none\'">Annuler</button>';
+echo '<p><label><strong>Nom :</strong><br><input type="text" name="nom" value="' . htmlspecialchars($user['nom']) . '"></label></p>';
+echo '<p><label><strong>Prénom :</strong><br><input type="text" name="prenom" value="' . htmlspecialchars($user['prenom']) . '"></label></p>';
+echo '<p><label><strong>Login :</strong><br><input type="text" name="login" value="' . htmlspecialchars($user['login']) . '"></label></p>';
+echo '<p><button type="submit">Valider</button></p>';
 echo '</form>';
-echo '</div>';
-
-echo '<p><strong>Prénom :</strong> ' . htmlspecialchars($user['prenom']) . ' <button type="button" onclick="document.getElementById(\'edit-prenom\').style.display=\'inline-block\'">Modifier</button></p>';
-echo '<div id="edit-prenom" style="display:none;margin-bottom:8px">';
-echo '<form method="post">';
-echo '<input type="hidden" name="field" value="prenom">';
-echo '<input type="text" name="value" value="' . htmlspecialchars($user['prenom']) . '">';
-echo '<button type="submit">Enregistrer</button> ';
-echo '<button type="button" onclick="this.parentNode.parentNode.style.display=\'none\'">Annuler</button>';
-echo '</form>';
-echo '</div>';
-
-echo '<p><strong>Login :</strong> ' . htmlspecialchars($user['login']) . ' <button type="button" onclick="document.getElementById(\'edit-login\').style.display=\'inline-block\'">Modifier</button></p>';
-echo '<div id="edit-login" style="display:none;margin-bottom:8px">';
-echo '<form method="post">';
-echo '<input type="hidden" name="field" value="login">';
-echo '<input type="text" name="value" value="' . htmlspecialchars($user['login']) . '">';
-echo '<button type="submit">Enregistrer</button> ';
-echo '<button type="button" onclick="this.parentNode.parentNode.style.display=\'none\'">Annuler</button>';
-echo '</form>';
-echo '</div>';
 
 disconnect($pdo);
 
