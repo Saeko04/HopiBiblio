@@ -200,6 +200,7 @@ function updateUserField(PDO $pdo, int $id, string $field, string $value): bool 
     $sql = "UPDATE utilisateurs SET $field = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([$value, $id]);
+}
 function getLivresNonRendus($pdo, $dureeEmprunt = 14)
 {
     $sql = "SELECT e.id, l.titre, l.auteur, e.date_emprunt, 
@@ -233,5 +234,4 @@ function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$idUtilisateur]);
     return $stmt->fetchAll();
-}
 }
