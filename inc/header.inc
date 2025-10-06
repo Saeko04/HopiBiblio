@@ -20,8 +20,8 @@ if (session_status() === PHP_SESSION_NONE) {
 </head>
 <body>
 <header>
-
-    <h1>La Plume Digitale - LEMAY & SEYS</h1>
+    <div class="nom", style="text-align:left">LEMAY & SEYS</div>
+    <h1>La Plume Digitale</h1>
     <nav class="navigation">
     <a href="index.php?action=accueil">Accueil</a>
     <a href="index.php?action=chercher">Livres</a>
