@@ -237,3 +237,19 @@ function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
     $stmt->execute([$idUtilisateur]);
     return $stmt->fetchAll();
 }
+//sauvegarde
+function getSauvegarde(string $host, string $db, string $user, string $pass)
+{
+    // Dossier où enregistrer les sauvegardes (à adapter selon ton projet)
+    $sauvegardeDir = __DIR__ . '../sauvegardes';
+
+    //nom du fichier de sauvegarde (heure et date)
+    $date = date(format:'d-M-Y_H-i-s');
+    $fichierSauvegarde = "../sauvegardes/{$db}_sauvegarde_{$date}.sql";
+
+    // commande mysql
+    $sql = "mysqldump -h $host -u $user -p$pass $db > \"$fichierSauvegarde\"";
+
+    //executer la commande
+   exec($sql);
+}

@@ -62,6 +62,19 @@ if (isset($_POST['supprimer'])) {
 // --- LIVRES NON RENDUS ---
 $livresNonRendus = getLivresNonRendus($pdo);
 
+//creation d'une sauvegarde
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sauvegarde'])) {
+    // Infos base de données (à adapter)
+    $host = 'localhost';
+    $db = 'dblogin4222';
+    $user = 'login4222';
+    $pass = 'ydLugQuPXmChIwb';
+
+    $sauvegarde = getSauvegarde($host, $db, $user, $pass);
+}
+
+
 // Déconnexion
 disconnect($pdo);
 

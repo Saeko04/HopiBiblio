@@ -119,4 +119,11 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Sauvegardes -->
+     <h2>Sauvegardes</h2>
+     <form method="post" action="">
+    <button type="submit" name="sauvegarde">Lancer la sauvegarde</button>
+</form>
+     
 </div>
