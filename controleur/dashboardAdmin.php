@@ -1,5 +1,4 @@
 <?php
-// Pas de session_start ici si déjà dans header.inc
 require_once __DIR__ . '/../modele/mesFonctionsAccesBDD.php';
 
 // Vérifier que l'utilisateur est connecté et est admin ou bibliothécaire
@@ -11,6 +10,24 @@ if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true || !in_arr
 // Connexion à la BDD
 $pdo = connect();
 
+// Récupérer les filtres depuis GET
+$titre    = trim($_GET['titre'] ?? '');
+$auteur   = trim($_GET['auteur'] ?? '');
+$cotation = trim($_GET['cotation'] ?? '');
+$annee    = trim($_GET['annee'] ?? '');
+
+// Charger la liste des cotations pour le <select>
+$cotationsDisponibles = $pdo->query('SELECT DISTINCT cotation FROM livres ORDER BY cotation')->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les livres selon les filtres
+if ($titre !== '' || $auteur !== '' || $cotation !== '' || $annee !== '') {
+    $livres = chercherLivres($pdo, $titre, $auteur, $cotation, $annee);
+} else {
+    $livres = getTousLesLivres($pdo);
+}
+
+
+
 // --- AJOUTER UN LIVRE ---
 if (isset($_POST['ajouter'])) {
     $titre = htmlspecialchars($_POST['titre']);
@@ -18,32 +35,39 @@ if (isset($_POST['ajouter'])) {
     $date_sortie = $_POST['date_sortie'];
     $resume = htmlspecialchars($_POST['resume']);
     $cotation = $_POST['cotation'] ?? '';
-    $image = null; // à gérer plus tard si tu veux ajouter l'image
 
-    ajouterLivre($pdo, $titre, $auteur, $date_sortie, $resume, $cotation, $image);
+    // Gestion du fichier image
+    $image = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $image = file_get_contents($_FILES['image']['tmp_name']);
+    } else {
+        $message = "❌ Veuillez sélectionner une image.";
+    }
 
-    header('Location: index.php?action=dashboardAdmin');
-    exit;
+    if ($image !== null) {
+        ajouterLivre($pdo, $titre, $auteur, $date_sortie, $resume, $cotation, $image);
+        header('Location: index.php?action=dashboardAdmin');
+        exit;
+    }
 }
 
 // --- SUPPRIMER UN LIVRE ---
 if (isset($_POST['supprimer'])) {
-    $id = intval($_POST['supprimer']);
-    supprimerLivre($pdo, $id);
-
+    $idLivre = intval($_POST['supprimer']);
+    supprimerLivre($pdo, $idLivre);
     header('Location: index.php?action=dashboardAdmin');
     exit;
 }
 
-// --- RÉCUPÉRER TOUS LES LIVRES ---
-$livres = getTousLesLivres($pdo);
+// --- LIVRES NON RENDUS ---
+$livresNonRendus = getLivresNonRendus($pdo);
 
-// Déconnexion de la BDD
+// Déconnexion
 disconnect($pdo);
 
-// Définir le CSS spécifique
+// CSS spécifique
 $css = 'dashboardAdmin.css';
 
-// Inclure la vue
+// Vue
 require __DIR__ . '/../vue/vueDashboardAdmin.php';
 ?>

@@ -19,8 +19,23 @@ $stmt = $pdo->prepare("SELECT id, titre, auteur, date_sortie, resume, image FROM
 $stmt->execute([$id]);
 $livre = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
 if (!$livre) {
     die("Livre non trouvé.");
 }
+
+$retour = $_GET['retour'] ?? 'liste';
+
+switch($retour) {
+    case 'mes-emprunts':
+        $retourUrl = 'index.php?action=dashboardClient';
+        $retourTexte = 'Retour à mes emprunts';
+        break;
+    default:
+        $retourUrl = 'index.php?action=chercher';
+        $retourTexte = 'Retour à la liste';
+        break;
+}
+
 $css = 'detailLivre.css'; // CSS spécifique pour la page détail-livre
 include __DIR__ . '/../vue/vueDetailLivre.php';

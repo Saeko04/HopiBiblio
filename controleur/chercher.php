@@ -4,25 +4,25 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 require_once $rootPath . '/modele/mesFonctionsAccesBDD.php';
 
-if (!function_exists('connect')) {
-    die('ERREUR: Fonctions de base de données non chargées');
-}
-
 $pdo = connect();
 
-$titre = $_GET['titre'] ?? '';
-$auteur = $_GET['auteur'] ?? '';
-$genreSelectionne = $_GET['genre'] ?? '';
-$dateSortie = $_GET['date_sortie'] ?? '';
-$cotationSelectionnee = $_GET['cotation'] ?? '';
-$id = $_GET['id'] ?? '';
+// Récupérer les filtres depuis GET
+$titre    = trim($_GET['titre'] ?? '');
+$auteur   = trim($_GET['auteur'] ?? '');
+$genreSelectionne = trim($_GET['genre'] ?? '');
+$annee    = trim($_GET['date_sortie'] ?? '');
+$cotationSelectionnee = trim($_GET['cotation'] ?? '');
+$id       = trim($_GET['id'] ?? '');
 
-$livres = chercherLivres($pdo, $titre, $auteur, $genreSelectionne, $dateSortie, $cotationSelectionnee);
+// Charger les listes pour les <select>
+$genresDisponibles = $pdo->query('SELECT id_cotation, nom FROM genres')->fetchAll(PDO::FETCH_ASSOC);
+$cotationsDisponibles = $pdo->query('SELECT DISTINCT cotation FROM livres ORDER BY cotation')->fetchAll(PDO::FETCH_ASSOC);
 
-// Ces données sont utilisées pour les listes déroulantes dans le formulaire
-$genresDisponibles = $pdo->query('SELECT id_cotation, nom FROM genres')->fetchAll();
-$cotationsDisponibles = $pdo->query('SELECT DISTINCT cotation FROM livres ORDER BY cotation')->fetchAll();
-$anneesDisponibles = $pdo->query('SELECT DISTINCT YEAR(date_sortie) as annee FROM livres ORDER BY annee DESC')->fetchAll();
-$livres = chercherLivres($pdo, $titre, $auteur, $genreSelectionne, $dateSortie, $cotationSelectionnee, $id);
+// Récupérer les livres selon les filtres
+if ($titre !== '' || $auteur !== '' || $genreSelectionne !== '' || $annee !== '' || $cotationSelectionnee !== '' || $id !== '') {
+    $livres = chercherLivres($pdo, $titre, $auteur, $cotationSelectionnee, $annee, $id, $genreSelectionne);
+} else {
+    $livres = getTousLesLivres($pdo);
+}
 
 include 'vue/vueChercher.php';

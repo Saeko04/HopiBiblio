@@ -190,38 +190,76 @@ a.supprimer:hover {
   color: var(--accent);
 }
 
-/* Conteneur des actions */
+/* Conteneur actions dans le tableau */
 .actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 15px; /* espace entre les boutons */
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
-/* Style général des boutons */
-.actions .btn {
-  padding: 10px 20px;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-  color: #fff;
+/* Boutons Modifier et Supprimer */
+.actions .btn-edit,
+.actions .btn-delete {
+    display: inline-block;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    color: var(--surface);
 }
 
-/* Bouton Modifier (différent style pour admin/bibliothécaire) */
-.actions .btn:first-child {
-  background-color: #007bff; /* bleu */
+/* Bouton Modifier */
+.actions .btn-edit {
+    background-color: var(--button-bg);
 }
 
-.actions .btn:first-child:hover {
-  background-color: #0056b3;
+.actions .btn-edit:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
 }
 
-/* Bouton Retour */
-.actions .btn:last-child {
-  background-color: #6c757d; /* gris */
+/* Bouton Supprimer */
+.actions .btn-delete {
+    background-color: #dc3545; /* rouge pour différencier */
 }
 
-.actions .btn:last-child:hover {
-  background-color: #5a6268;
+.actions .btn-delete:hover {
+    background-color: #a71d2a;
+    transform: translateY(-2px);
+}
+
+/* Form inline pour le bouton Supprimer */
+.inline-form {
+    display: inline;
+}
+
+.search-form-dashboard {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form-dashboard input[type="text"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    width: 300px;
+}
+
+.search-form-dashboard .btn-search {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background: var(--button-bg);
+    color: var(--surface);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-form-dashboard .btn-search:hover {
+    background: var(--button-hover);
 }

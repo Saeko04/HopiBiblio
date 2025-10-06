@@ -26,9 +26,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <?php if (!empty($_SESSION['connected']) && $_SESSION['connected'] === true): ?>
         <a href="index.php?action=compteClient">Mon Compte</a>
         <?php if (in_array($_SESSION['role'], ['admin','bibliothecaire'])): ?>
-            <a href="index.php?action=dashboardAdmin">Dashboard Admin</a>
+            <a href="index.php?action=dashboardAdmin">Tableau de bord</a>
         <?php else: ?>
-            <a href="index.php?action=dashboardClient">Dashboard Client</a>
+            <a href="index.php?action=dashboardClient">Tableau de bord</a>
         <?php endif; ?>
 
         <a href="index.php?action=logout">Déconnexion (<?= htmlspecialchars($_SESSION['login']) ?>)</a>
