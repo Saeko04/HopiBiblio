@@ -157,6 +157,24 @@ function verifierUtilisateur(PDO $pdo, string $login, string $password): ?array 
     return null;
 }
 
+// Récupérer un utilisateur par son ID
+function getUserById(PDO $pdo, int $id): ?array {
+    $stmt = $pdo->prepare("SELECT id, nom, prenom, login FROM utilisateurs WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch() ?: null;
+}
+
+// Mettre à jour un champ (nom, prenom ou login) d'un utilisateur
+function updateUserField(PDO $pdo, int $id, string $field, string $value): bool {
+    $allowed = ['nom', 'prenom', 'login'];
+    if (!in_array($field, $allowed, true)) {
+        return false;
+    }
+    $sql = "UPDATE utilisateurs SET $field = ? WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([$value, $id]);
+}
+
 
 
 ?>

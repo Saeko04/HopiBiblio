@@ -15,6 +15,8 @@ function controleurPrincipal($action)
     $lesActions['scanner'] = 'scannerLivre.php';
     $lesActions['dashboardClient'] = 'dashboardClient.php';
     $lesActions['dashboardAdmin'] = 'dashboardAdmin.php';
+    $lesActions['compteClient'] = 'compteClient.php';
+
 
 
 
