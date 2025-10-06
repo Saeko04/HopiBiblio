@@ -22,8 +22,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <nav class="navigation">
     <a href="index.php?action=accueil">Accueil</a>
     <a href="index.php?action=chercher">Livres</a>
-
+    
     <?php if (!empty($_SESSION['connected']) && $_SESSION['connected'] === true): ?>
+        <a href="index.php?action=compteClient">Mon Compte</a>
         <?php if (in_array($_SESSION['role'], ['admin','bibliothecaire'])): ?>
             <a href="index.php?action=dashboardAdmin">Tableau de bord</a>
         <?php else: ?>
