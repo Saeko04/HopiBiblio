@@ -38,4 +38,14 @@ switch($retour) {
 }
 
 $css = 'detailLivre.css'; // CSS spécifique pour la page détail-livre
+// Vérifier si le livre est déjà emprunté (date_retour IS NULL ou date_retour > NOW())
+$isEmprunte = false;
+$dateRetourPrevue = null;
+$check = $pdo->prepare('SELECT date_retour FROM emprunts WHERE id_livre = ? AND (date_retour IS NULL OR date_retour > NOW()) ORDER BY date_emprunt DESC LIMIT 1');
+$check->execute([$id]);
+$rowEmprunt = $check->fetch(PDO::FETCH_ASSOC);
+if ($rowEmprunt) {
+    $isEmprunte = true;
+    $dateRetourPrevue = $rowEmprunt['date_retour'];
+}
 include __DIR__ . '/../vue/vueDetailLivre.php';

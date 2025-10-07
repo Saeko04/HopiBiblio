@@ -48,3 +48,24 @@
 .btn:hover {
     background-color: #a06d47;
 }
+
+/* Conteneur pour les actions (boutons) sur la page détail */
+.actions {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Bouton emprunter désactivé */
+.btn.disabled,
+.btn[disabled] {
+    background-color: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.small {
+    margin: 0 0 0 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted, #666);
+}
