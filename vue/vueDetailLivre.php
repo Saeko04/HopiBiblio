@@ -36,6 +36,7 @@
             <!-- Formulaire POST pour l'emprunt : envoie id + infos du livre -->
             <?php if (!empty($isEmprunte)): ?>
                 <button class="btn emprunter disabled" disabled>Emprunter</button>
+                <p class="error">Livre déjà emprunté</p>
                 <?php if (!empty($dateRetourPrevue)): ?>
                     <p class="small">Date de retour prévue : <?= htmlspecialchars($dateRetourPrevue) ?></p>
                 <?php endif; ?>
