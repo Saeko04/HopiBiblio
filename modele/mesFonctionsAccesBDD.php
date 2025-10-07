@@ -236,28 +236,26 @@ function getEmpruntsUtilisateur(PDO $pdo, int $idUtilisateur): array
     return $stmt->fetchAll();
 }
 
-// Ajouter un emprunt pour un utilisateur (date_emprunt = NOW(), date_retour = NULL)
-function ajouterEmprunt(PDO $pdo, int $idUtilisateur, int $idLivre): bool
-{
-    // Planifier la date de retour 14 jours après la date d'emprunt
-    // Conformément à l'architecture : id, id_utilisateur, id_livre, date_emprunt, date_retour
-    $sql = "INSERT INTO emprunts (id_utilisateur, id_livre, date_emprunt, date_retour) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY))";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([$idUtilisateur, $idLivre]);
+// --- STATISTIQUES ---
+
+//Nombre total de livres
+function getNombreTotalLivres(PDO $pdo): int {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM livres");
+    return (int) $stmt->fetchColumn();
 }
 
-// Marquer un emprunt comme retourné (date_retour = NOW()) en ciblant l'id de l'emprunt
-function rendreEmpruntById(PDO $pdo, int $idEmprunt, int $idUtilisateur): bool
-{
-    $sql = "UPDATE emprunts SET date_retour = NOW() WHERE id = ? AND id_utilisateur = ? AND (date_retour IS NULL OR date_retour > NOW())";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([$idEmprunt, $idUtilisateur]);
+//Nombre total d'emprunts en cours
+function getNombreEmpruntsEnCours(PDO $pdo): int {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM emprunts WHERE date_retour IS NULL");
+    return (int) $stmt->fetchColumn();
 }
 
-// Supprimer un emprunt (utilisé pour "retourner" en supprimant l'enregistrement)
-function supprimerEmpruntById(PDO $pdo, int $idEmprunt, int $idUtilisateur): bool
-{
-    $sql = "DELETE FROM emprunts WHERE id = ? AND id_utilisateur = ? LIMIT 1";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([$idEmprunt, $idUtilisateur]);
+//Nombre d'emprunts par livre
+function getFrequenceEmpruntParLivre(PDO $pdo): array {
+    $sql = "SELECT l.titre, COUNT(e.id) AS nb_emprunts
+            FROM livres l
+            LEFT JOIN emprunts e ON l.id = e.id_livre
+            GROUP BY l.id
+            ORDER BY nb_emprunts DESC";
+    return $pdo->query($sql)->fetchAll();
 }
