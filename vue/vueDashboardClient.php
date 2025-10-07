@@ -15,13 +15,13 @@
                         <?php endif; ?>
                     </a>
                     <div class="book-info">
-                        <h3><?= htmlspecialchars($livre['titre']) ?></h3>
-                        <p>Auteur : <?= htmlspecialchars($livre['auteur']) ?></p>
-                        <p>Sortie : <?= htmlspecialchars($livre['date_sortie']) ?></p>
-                        <p>Emprunté le : <?= htmlspecialchars($livre['date_emprunt']) ?></p>
-                        <p>Date de retour prévue : <?= htmlspecialchars($livre['date_retour']) ?></p>
+                        <h3><?= htmlspecialchars($livre['titre'] ?? '') ?></h3>
+                        <p>Auteur : <?= htmlspecialchars($livre['auteur'] ?? '') ?></p>
+                        <p>Sortie : <?= htmlspecialchars($livre['date_sortie'] ?? '') ?></p>
+                        <p>Emprunté le : <?= htmlspecialchars($livre['date_emprunt'] ?? '') ?></p>
+                        <p>Date de retour prévue : <?= htmlspecialchars($livre['date_retour'] ?? '') ?></p>
                         <form method="post" action="index.php?action=rendre" style="margin-top:8px;">
-                            <input type="hidden" name="id_emprunt" value="<?= htmlspecialchars($livre['id_emprunt']) ?>">
+                            <input type="hidden" name="id_emprunt" value="<?= htmlspecialchars($livre['id_emprunt'] ?? '') ?>">
                             <button type="submit" class="btn">Retour</button>
                         </form>
                     </div>

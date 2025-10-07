@@ -259,3 +259,21 @@ function getFrequenceEmpruntParLivre(PDO $pdo): array {
             ORDER BY nb_emprunts DESC";
     return $pdo->query($sql)->fetchAll();
 }
+
+
+// Ajouter un emprunt
+function ajouterEmprunt(PDO $pdo, int $idUtilisateur, int $idLivre, int $dureeEmprunt = 14): bool {
+    $dateEmprunt = date('Y-m-d');
+    $dateLimite = date('Y-m-d', strtotime("+$dureeEmprunt days"));
+    $sql = "INSERT INTO emprunts (id_utilisateur, id_livre, date_emprunt, date_limite) VALUES (?, ?, ?, ?)";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([$idUtilisateur, $idLivre, $dateEmprunt, $dateLimite]);
+}
+
+
+// Marquer un emprunt comme rendu (retour)
+function supprimerEmpruntById(PDO $pdo, int $idEmprunt, int $idUtilisateur): bool {
+    $sql = "UPDATE emprunts SET date_retour = NOW() WHERE id = ? AND id_utilisateur = ? AND date_retour IS NULL";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([$idEmprunt, $idUtilisateur]);
+}

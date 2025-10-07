@@ -2,7 +2,9 @@
 $rootPath = dirname(__DIR__, 1);
 require_once $rootPath . '/modele/mesFonctionsAccesBDD.php';
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (empty($_SESSION['connected']) || $_SESSION['connected'] !== true) {
     header('Location: index.php?action=connexion');
