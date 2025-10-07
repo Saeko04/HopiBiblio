@@ -11,6 +11,8 @@ function controleurPrincipal($action)
     $lesActions['logout'] = 'logout.php';
     
     $lesActions['detail-livre'] = 'detailLivre.php';
+    $lesActions['emprunter'] = 'emprunter.php';
+    $lesActions['rendre'] = 'rendre.php';
     $lesActions['modifier-livre'] = 'modifierLivre.php';
     $lesActions['scanner'] = 'scannerLivre.php';
     $lesActions['dashboardClient'] = 'dashboardClient.php';

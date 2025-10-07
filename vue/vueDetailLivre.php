@@ -30,7 +30,25 @@
             $retourUrl = 'index.php?action=chercher';
         }
         ?>
-        <a href="<?= $retourUrl ?>" class="btn"><?= $retourTexte ?></a>
+        <div class="actions">
+            <a href="<?= $retourUrl ?>" class="btn"><?= $retourTexte ?></a>
+
+            <!-- Formulaire POST pour l'emprunt : envoie id + infos du livre -->
+            <?php if (!empty($isEmprunte)): ?>
+                <button class="btn emprunter disabled" disabled>Emprunter</button>
+                <?php if (!empty($dateRetourPrevue)): ?>
+                    <p class="small">Date de retour prévue : <?= htmlspecialchars($dateRetourPrevue) ?></p>
+                <?php endif; ?>
+            <?php else: ?>
+                <form method="post" action="index.php?action=emprunter" style="margin:0;">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($livre['id']) ?>">
+                    <input type="hidden" name="titre" value="<?= htmlspecialchars($livre['titre']) ?>">
+                    <input type="hidden" name="auteur" value="<?= htmlspecialchars($livre['auteur']) ?>">
+                    <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
+                    <button type="submit" class="btn emprunter">Emprunter</button>
+                </form>
+            <?php endif; ?>
+        </div>
 
 
     </div>

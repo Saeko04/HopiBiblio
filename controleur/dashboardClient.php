@@ -9,14 +9,12 @@ if (!isset($_SESSION['connected']) || $_SESSION['connected'] !== true || $_SESSI
 
 $pdo = connect();
 
-// Récupérer les livres empruntés par le client avec l'image
-$stmt = $pdo->prepare("
-    SELECT l.id, l.titre, l.auteur, l.date_sortie, l.image
+$sql = "SELECT e.id AS id_emprunt, l.id AS id_livre, l.titre, l.auteur, l.date_sortie, l.image, e.date_emprunt, e.date_retour
     FROM livres l
     JOIN emprunts e ON l.id = e.id_livre
-    WHERE e.id_utilisateur = ?
-    ORDER BY e.date_emprunt DESC
-");
+    WHERE e.id_utilisateur = ? AND (e.date_retour IS NULL OR e.date_retour > NOW())
+    ORDER BY e.date_emprunt DESC";
+$stmt = $pdo->prepare($sql);
 $stmt->execute([$_SESSION['id']]);
 $livresEmpruntes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
