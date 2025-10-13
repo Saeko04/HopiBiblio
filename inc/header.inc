@@ -12,6 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <meta charset="UTF-8">
     <title>La Plume Digitale</title>
+    <link rel="icon" type="image/png" href="img/logo_LPD.png">
     <link rel="stylesheet" href="css/style.css">
     <?php if (!empty($css)): ?>
         <link rel="stylesheet" href="css/<?= htmlspecialchars($css) ?>">
@@ -22,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <header>
     <div class="header-nom" style="position:absolute;top:20px;left:30px;font-weight:bold;font-size:1.1em;z-index:2;">LEMAY &amp; SEYS</div>
     <div class="header-logo-titre" style="display:flex;align-items:center;gap:16px;justify-content:center;">
-        <img src="img/logo_LPD.png" alt="Logo La Plume Digitale" style="height:48px;">
+    <img src="img/logo_LPD.png" alt="Logo La Plume Digitale" class="header-logo-img">
         <h1 style="margin:0;">La Plume Digitale</h1>
     </div>
     <nav class="navigation">
