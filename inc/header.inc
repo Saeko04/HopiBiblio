@@ -20,8 +20,11 @@ if (session_status() === PHP_SESSION_NONE) {
 </head>
 <body>
 <header>
-    <div class="nom", style="text-align:left">LEMAY & SEYS</div>
-    <h1>La Plume Digitale</h1>
+    <div class="header-nom" style="position:absolute;top:20px;left:30px;font-weight:bold;font-size:1.1em;z-index:2;">LEMAY &amp; SEYS</div>
+    <div class="header-logo-titre" style="display:flex;align-items:center;gap:16px;justify-content:center;">
+        <img src="img/logo_LPD.png" alt="Logo La Plume Digitale" style="height:48px;">
+        <h1 style="margin:0;">La Plume Digitale</h1>
+    </div>
     <nav class="navigation">
     <a href="index.php?action=accueil">Accueil</a>
     <a href="index.php?action=chercher">Livres</a>
