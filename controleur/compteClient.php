@@ -105,12 +105,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nom'], $_POST['prenom
     }
 }
 
-// affichage des données de l'utilisateur dans un formulaire global
+
+// Gestion export JSON
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exportDonnees'])) {
+    $donnees = [
+        'id' => $user['id'],
+        'nom' => $user['nom'],
+        'prenom' => $user['prenom'],
+        'login' => $user['login'],
+        'email' => $user['email'] ?? '',
+    ];
+    $json = json_encode($donnees, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    $filename = 'donnees_utilisateur_' . $user['id'] . '.json';
+    header('Content-Type: application/json');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    echo $json;
+    disconnect($pdo);
+    exit;
+}
+
+// Formulaire principal
 echo '<form method="post">';
 echo '<p><label><strong>Nom :</strong><br><input type="text" name="nom" value="' . htmlspecialchars($user['nom']) . '"></label></p>';
 echo '<p><label><strong>Prénom :</strong><br><input type="text" name="prenom" value="' . htmlspecialchars($user['prenom']) . '"></label></p>';
 echo '<p><label><strong>Login :</strong><br><input type="text" name="login" value="' . htmlspecialchars($user['login']) . '"></label></p>';
 echo '<p><button type="submit">Valider</button></p>';
+echo '</form>';
+
+// Formulaire export JSON
+echo '<form method="post" style="margin-top:0;">';
+echo '<input type="hidden" name="exportDonnees" value="1">';
+echo '<p><button type="submit" name="exportDonneesBtn">Récupérer mes données</button></p>';
 echo '</form>';
 
 disconnect($pdo);
